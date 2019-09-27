@@ -7,7 +7,7 @@
 bool running = true;					// status of current program
 
 /** Stack */
-#define STACK_SIZE 256;
+#define STACK_SIZE 256
 static int stack[STACK_SIZE]; // create stack
 
 
@@ -56,6 +56,11 @@ typedef enum
 
 static unsigned char EFLAGS[1]; // single 8 bit register (1 bi per flag)
 
+/* Flag setting
+ *	use and with 0 to clear a bit
+ *  use or with 1 to set a bit
+ */
+
 
 /** Programs (for testing) */
 // in final program files passed in as arg
@@ -73,6 +78,8 @@ const int program1[] = {
 	ADD,
 	PSH, 2,
 	ADD,
+	PSH, 5,
+	SUB,
 	POP,
 	HLT
 };
@@ -116,6 +123,13 @@ void eval(int instr)
 			break;
 		}
 		case SUB: {
+			int a = stack[sp--];
+			int b = stack[sp--];
+
+			int result = b - a;
+
+			sp++;
+			stack[sp] = result;
 			break;
 		}
 	}
