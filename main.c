@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+bool running = true;					// status of current program
+
 /** Stack */
 #define STACK_SIZE 256;
 static int stack[STACK_SIZE]; // create stack
@@ -12,12 +14,13 @@ static int stack[STACK_SIZE]; // create stack
 /** Instructions */
 typedef enum
 {
-	PSH, // 0  -- psh val 		:: pushes <val> to stack
-	ADD, // 1  -- add 			:: adds top two vals on stack, result back on stack
-	POP,
-	SET,
-	HLT,
-	MOV
+	PSH, // 0  -- PSH <val> 			:: pushes <val> to stack
+	ADD, // 1  -- ADD 					:: adds top two vals on stack, result back on stack
+	POP, // 2  -- POP 					:: removes top val on stack
+	SET, // 3  -- SET <reg> <val>		:: set <reg> to hold <val>
+	HLT, // 4  -- HLT					:: terminate program
+	MOV, // 5  -- MOV <reg1> <reg2>		:: moves val from <reg2> to <reg1>
+	SUB	 // 6  -- SUB					:: subtracts top two vals on stack, (top - next), result back on stack
 } InstructionSet;
 
 
@@ -32,14 +35,30 @@ typedef enum
 
 static int registers[NUM_OF_REGISTERS]; // holds register data
 
-#define pc (registers[PC])			// program counter
-#define sp (registers[SP])			// stack pointer
+#define pc (registers[PC])				// program counter abstraction
+#define sp (registers[SP])				// stack pointer abstraction
 
 
-bool running = true;				// status of current program
+/** Status flags */
+//TODO
+typedef enum
+{
+	CF, // [bit 0] -- Carry flag		:: Set if the last arithmetic operation carried (addition) or borrowed (subtraction) a bit beyond its register size
+	PF, // [bit 1] -- Parity flag		:: Set if the number of set bits in the least significant byte is a multiple of 2
+	AF, // [bit 2] -- Adjust flag		:: Carry of BCD numbers aruthmetic operations
+	ZF, // [bit 3] -- Zero flag			:: Set if the result of an operation is 0
+	SF, // [bit 4] -- Sign flag 		:: Set if the result of an operation is negative
+	IF, // [bit 5] -- Interrupt flag 	:: Set if interrupts are enabled
+	OF, // [bit 6] -- Overflow flag 	:: Set if signed arithmetic operations result in a value too large for the register to contain
+	NF	// [bit 7] -- Empty flag		:: Currently empty (value doesn't matter) 
+	
+} Flags;
+
+static unsigned char EFLAGS[1]; // single 8 bit register (1 bi per flag)
 
 
-// programs
+/** Programs (for testing) */
+// in final program files passed in as arg
 const int program2[] = {
 	PSH, 5,
 	PSH, 6,
@@ -59,6 +78,7 @@ const int program1[] = {
 };
 
 
+/** Eval */
 // determines what to do for a given instruction
 void eval(int instr)
 {
@@ -95,18 +115,25 @@ void eval(int instr)
 		case MOV: {
 			break;
 		}
+		case SUB: {
+			break;
+		}
 	}
 }
 
-// returns the current instruction from the program array
+/** Fetch */
+// reads current instruction (may be removed)
 int fetch()
 {
 	return program1[pc]; // TODO: how to pick what program is running?
 }
 
 
-int main()
+int main(int argc, char* argv[])
 {
+	//take in file to use as program
+
+
 	// if HLT not called
 	while(running)
 	{
