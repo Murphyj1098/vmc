@@ -33,29 +33,6 @@ int instruction_space = 4; // amount of space allocated for the instruction arra
 int instruction_count = 0; // number of instructions to be executed
 
 
-/** Programs (for testing) */
-// in final program files passed in as arg
-const int program1[] = {
-	PSH, 5,
-	PSH, 6,
-	ADD,
-	POP,
-	HLT
-};
-
-const int program2[] = {
-	PSH, 1,
-	PSH, 3,
-	ADD,
-	PSH, 2,
-	ADD,
-	PSH, 5,
-	SUB,
-	POP,
-	HLT
-};
-
-
 /** Eval */
 // determines what to do for a given instruction
 void eval(int instr)
@@ -64,7 +41,7 @@ void eval(int instr)
 	{
 		case PSH: {
 			SP++;
-			stack[SP] = program1[++PC];
+			stack[SP] = instructions[++PC];
 			break;
 		}
 		case ADD: {
@@ -83,7 +60,7 @@ void eval(int instr)
 			break;
 		}
 		case SET: {
-			registers[program1[PC++]] = program1[PC++];
+			registers[instructions[PC++]] = instructions[PC++];
 			break;
 		}
 		case HLT: {
@@ -107,11 +84,7 @@ void eval(int instr)
 }
 
 /** Fetch */
-// reads current instruction (may be removed)
-int fetch()
-{
-	return program1[PC]; // TODO: how to pick what program is running?
-}
+#define FETCH (instructions[PC])
 
 
 int main(int argc, char* argv[])
@@ -177,7 +150,7 @@ int main(int argc, char* argv[])
 	// if HLT not called
 	while(running && PC < instruction_count)
 	{
-		eval(fetch());	// get and eval current instruction
+		eval(FETCH);	// get and eval current instruction
 		PC++;			// increment program counter
 	}
 
