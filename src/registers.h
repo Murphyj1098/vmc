@@ -10,5 +10,5 @@ typedef enum
 
 static int registers[NUM_OF_REGISTERS]; // holds register data
 
-#define pc (registers[PC])				// program counter abstraction
-#define sp (registers[SP])				// stack pointer abstraction
+#define PC (registers[PC])				// program counter abstraction
+#define SP (registers[SP])				// stack pointer abstraction
