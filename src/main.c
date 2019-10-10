@@ -94,6 +94,7 @@ void eval(int instr)
 }
 
 /** Fetch */
+// set to value of current instruction
 #define FETCH (instructions[PC])
 
 
