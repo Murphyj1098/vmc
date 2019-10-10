@@ -6,7 +6,7 @@
 #include <string.h>
 
 #include "registers.h"
-#include "statusFlags.h"
+// #include "statusFlags.h" currently unused
 
 
 bool running = true;					// status of current program
@@ -60,7 +60,17 @@ void eval(int instr)
 			break;
 		}
 		case SET: {
-			registers[instructions[PC++]] = instructions[PC++];
+			int registerIn = instructions[PC++];
+			int val = instructions[PC++];
+
+			if(registerIn > 7)
+			{
+				running = false;
+				printf("Error, set calls out of bound register\n");
+				break;
+			}
+
+			registers[registerIn] = val;
 			break;
 		}
 		case HLT: {
