@@ -25,7 +25,16 @@ typedef enum
 	SET, // 3  -- SET <reg> <val>		:: set <reg> to hold <val>
 	HLT, // 4  -- HLT					:: terminate program
 	MOV, // 5  -- MOV <reg1> <reg2>		:: moves val from <reg2> to <reg1>
-	SUB	 // 6  -- SUB					:: subtracts top two vals on stack, (top - next), result back on stack
+	SUB, // 6  -- SUB					:: subtracts top two vals on stack, (top - next), result back on stack
+	MUL, // 7  -- MUL					:: multiplies top two vals on stack
+	DIV, // 8  -- DIV					:: divides top two vals on stack
+	SLT, // 9  -- SLT <reg1> <reg2>		:: pushes (<reg1> < <reg2>) to stack
+	LOG, // 10 -- LOG <val/reg1>		:: print out <va/reg1>
+	IF,  // 11 -- IF  <reg1> <val> <ip> :: if <reg1> == <val> branch to the pc
+	IFN, // 12 -- IFN <reg1> <val> <ip> :: if <reg1> != <val> branch to the pc
+	GLD, // 13 -- GLD <reg1>			:: loads <reg1> to stack
+	GPT, // 14 -- GPT <reg1>			:: pushes top of stack to <reg1>
+	NOP  // 15 -- NOP					:: empty instruction
 } InstructionSet;
 
 int *instructions; // array to hold instructions read in from file
