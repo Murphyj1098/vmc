@@ -65,7 +65,7 @@ void eval(int instr)
 		}
 		case POP: {
 			int popVal = stack[SP--];
-			printf("Popped %d\n", popVal);
+			printf("Popped %d\n", popVal); // debug statement
 			break;
 		}
 		case SET: {
@@ -97,6 +97,46 @@ void eval(int instr)
 
 			SP++;
 			stack[SP] = result;
+			break;
+		}
+		case MUL: {
+			int a = stack[SP--];
+			int b = stack[SP--];
+
+			int result = b * a;
+
+			SP++;
+			stack[SP] = result;
+			break;
+		}
+		case DIV: {
+			int a = stack[SP--];
+			int b = stack[SP--];
+
+			int result = b / a;
+
+			SP++;
+			stack[SP] = result;
+			break;
+		}
+		case SLT: {
+			SP--;
+			stack[SP] = stack[SP+1] < stack[SP];
+			break;
+		}
+		case LOG: {
+			break;
+		}
+		case  IF: {
+			break;
+		}
+		case IFN: {
+			break;
+		}
+		case GLD: {
+			break;
+		}
+		case GPT: {
 			break;
 		}
 	}
