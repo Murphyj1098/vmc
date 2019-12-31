@@ -1,6 +1,6 @@
 
 /** Status flags */
-typedef enum
+typedef enum Flags
 {
 	CF, // [bit 0] -- Carry flag		:: Set if the last arithmetic operation carried (addition) or borrowed (subtraction) a bit beyond its register size
 	PF, // [bit 1] -- Parity flag		:: Set if the number of set bits in the least significant byte is a multiple of 2

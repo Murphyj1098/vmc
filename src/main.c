@@ -17,7 +17,7 @@ static int stack[STACK_SIZE]; // create stack
 
 
 /** Instructions */
-typedef enum
+typedef enum InstructionSet
 {
 	PSH, // 0  -- PSH <val> 			:: pushes <val> to stack
 	ADD, // 1  -- ADD 					:: adds top two vals on stack, result back on stack

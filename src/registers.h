@@ -1,6 +1,6 @@
 
 /** Registers */
-typedef enum
+typedef enum Registers
 {
 	A, B, C, D, E, F, I, J,
 	PC,
