@@ -7,3 +7,6 @@ all:
 
 clean:
 	rm vmc
+
+release:
+	$(CC) $(SRC_FILES) $(CC_FLAGS) -o vmc && cp vmc ~/bin
