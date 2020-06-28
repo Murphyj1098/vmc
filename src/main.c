@@ -150,9 +150,9 @@ void eval(int instr)
 int main(int argc, char* argv[])
 {
 	//take in file to use as program
-	if(argc < 1)
+	if(argc <= 1)
 	{
-		printf("Error, no input program as argument");
+		printf("Error, no input program as argument\n");
 		return -1;
 	}
 
