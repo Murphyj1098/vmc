@@ -3,10 +3,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <string.h>
 
 #include "registers.h"
-// #include "statusFlags.h" currently unused
+#include "statusFlags.h"
 
 
 bool running = true;					// status of current program
@@ -61,6 +62,12 @@ void eval(int instr)
 
 			SP++;
 			stack[SP] = result;
+
+			if(result == 0)		// If the result is 0
+			{
+				EFLAGS = EFLAGS | ZF; // Set the zero flag
+			}
+
 			break;
 		}
 		case POP: {
