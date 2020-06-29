@@ -7,13 +7,13 @@ typedef enum Flags
 	AF, // [bit 2] -- Adjust flag		:: Carry of BCD numbers aruthmetic operations
 	ZF, // [bit 3] -- Zero flag			:: Set if the result of an operation is 0
 	SF, // [bit 4] -- Sign flag 		:: Set if the result of an operation is negative
-	IF, // [bit 5] -- Interrupt flag 	:: Set if interrupts are enabled
+	XF, // [bit 5] -- Interrupt flag 	:: Set if interrupts are enabled
 	OF, // [bit 6] -- Overflow flag 	:: Set if signed arithmetic operations result in a value too large for the register to contain
 	NF	// [bit 7] -- Empty flag		:: Currently empty (value doesn't matter) 
 	
 } Flags;
 
-static unsigned char EFLAGS[1]; // single 8 bit register (1 bit per flag)
+static uint8_t EFLAGS; // single 8 bit register (1 bit per flag)
 
 /* Flag Bit Masks
  *  use & with 0 to clear a bit
@@ -24,6 +24,6 @@ static unsigned char EFLAGS[1]; // single 8 bit register (1 bit per flag)
 #define AF_BITS 0X20
 #define ZF_BITS 0X10
 #define SF_BITS 0X08
-#define IF_BITS 0X04
+#define XF_BITS 0X04
 #define OF_BITS 0X02
 #define NF_BITS 0X01
