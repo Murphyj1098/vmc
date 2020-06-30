@@ -10,11 +10,11 @@
 #include "statusFlags.h"
 
 
-bool running = true;					// status of current program
+bool running = true;			// status of current program
 
 /** Stack */
 #define STACK_SIZE 256
-static int stack[STACK_SIZE]; // create stack
+static int stack[STACK_SIZE];	// create stack
 
 
 /** Instructions */
@@ -63,10 +63,8 @@ void eval(int instr)
 			SP++;
 			stack[SP] = result;
 
-			if(result == 0)		// If the result is 0
-			{
-				EFLAGS = EFLAGS | ZF; // Set the zero flag
-			}
+			if(result == 0)				// If the result is 0
+				EFLAGS = EFLAGS | ZF;	// Set the zero flag
 
 			break;
 		}
@@ -76,17 +74,17 @@ void eval(int instr)
 			break;
 		}
 		case SET: {
-			int registerIn = instructions[PC++];
-			int val = instructions[PC++];
+			int registerSrc = instructions[++PC];
+			int val = instructions[++PC];
 
-			if(registerIn > 7)
+			if(registerSrc > 7)
 			{
 				running = false;
-				printf("Error, set calls out of bound register\n");
+				printf("Error, SET calls out of bound register\n");
 				break;
 			}
 
-			registers[registerIn] = val;
+			registers[registerSrc] = val;
 			break;
 		}
 		case HLT: {
@@ -94,6 +92,17 @@ void eval(int instr)
 			break;
 		}
 		case MOV: {
+			int registerDes = instructions[++PC];
+			int registerSrc = instructions[++PC];
+
+			if(registerSrc > 7 || registerDes > 7)
+			{
+				running = false;
+				printf("Error, MOV calls out of bound register\n");
+			}
+
+			registers[registerDes] = registers[registerSrc]; // Move value from source register to destination register
+			printf("Moved value: %d\n", registers[registerDes]);
 			break;
 		}
 		case SUB: {
@@ -104,6 +113,10 @@ void eval(int instr)
 
 			SP++;
 			stack[SP] = result;
+
+			if(result == 0)				// If the result is 0
+				EFLAGS = EFLAGS | ZF;	// Set the zero flag
+
 			break;
 		}
 		case MUL: {
