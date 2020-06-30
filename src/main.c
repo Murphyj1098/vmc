@@ -22,7 +22,7 @@ typedef enum InstructionSet
 {
 	PSH, // 0  -- PSH <val> 			:: pushes <val> to stack
 	ADD, // 1  -- ADD 					:: adds top two vals on stack, result back on stack
-	POP, // 2  -- POP <reg1>			:: removes top val on stack, puts in <reg1>
+	POP, // 2  -- POP <reg1>			:: pushes top of stack to <reg1>
 	SET, // 3  -- SET <reg1> <val>		:: set <reg1> to hold <val>
 	HLT, // 4  -- HLT					:: terminate program
 	MOV, // 5  -- MOV <reg1> <reg2>		:: moves val from <reg2> to <reg1>
@@ -34,8 +34,6 @@ typedef enum InstructionSet
 	IF,  // 11 -- IF  <reg1> <val> <ip> :: if <reg1> == <val> branch to the pc
 	IFN, // 12 -- IFN <reg1> <val> <ip> :: if <reg1> != <val> branch to the pc
 	GLD, // 13 -- GLD <reg1>			:: loads <reg1> to stack
-	GPT, // 14 -- GPT <reg1>			:: pushes top of stack to <reg1>
-	NOP  // 15 -- NOP					:: empty instruction
 } InstructionSet;
 
 int *instructions; // array to hold instructions read in from file
@@ -50,8 +48,7 @@ void eval(int instr)
 	switch(instr)
 	{
 		case PSH: {
-			SP++;
-			stack[SP] = instructions[++PC];
+			stack[++SP] = instructions[++PC];
 			break;
 		}
 		case ADD: {
@@ -60,8 +57,7 @@ void eval(int instr)
 
 			int result = b + a; // ORDER! Stacks are LIFO
 
-			SP++;
-			stack[SP] = result;
+			stack[++SP] = result;
 
 			if(result == 0)				// If the result is 0
 				EFLAGS = EFLAGS | ZF;	// Set the zero flag
@@ -113,8 +109,7 @@ void eval(int instr)
 
 			int result = b - a;
 
-			SP++;
-			stack[SP] = result;
+			stack[++SP] = result;
 
 			if(result == 0)				// If the result is 0
 				EFLAGS = EFLAGS | ZF;	// Set the zero flag
@@ -127,8 +122,7 @@ void eval(int instr)
 
 			int result = b * a;
 
-			SP++;
-			stack[SP] = result;
+			stack[++SP] = result;
 			break;
 		}
 		case DIV: {
@@ -137,13 +131,11 @@ void eval(int instr)
 
 			int result = b / a;
 
-			SP++;
-			stack[SP] = result;
+			stack[++SP] = result;
 			break;
 		}
 		case SLT: {
-			SP--;
-			stack[SP] = stack[SP+1] < stack[SP];
+			stack[--SP] = stack[SP+1] < stack[SP];
 			break;
 		}
 		case LOG: {
@@ -158,9 +150,8 @@ void eval(int instr)
 			break;
 		}
 		case GLD: {
-			break;
-		}
-		case GPT: {
+			int val = registers[instructions[++PC]]; // store val in <reg1>
+			stack[++SP] = val; // put val on top of stack
 			break;
 		}
 	}
