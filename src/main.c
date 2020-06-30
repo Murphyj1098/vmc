@@ -22,15 +22,15 @@ typedef enum InstructionSet
 {
 	PSH, // 0  -- PSH <val> 			:: pushes <val> to stack
 	ADD, // 1  -- ADD 					:: adds top two vals on stack, result back on stack
-	POP, // 2  -- POP 					:: removes top val on stack
-	SET, // 3  -- SET <reg> <val>		:: set <reg> to hold <val>
+	POP, // 2  -- POP <reg1>			:: removes top val on stack, puts in <reg1>
+	SET, // 3  -- SET <reg1> <val>		:: set <reg1> to hold <val>
 	HLT, // 4  -- HLT					:: terminate program
 	MOV, // 5  -- MOV <reg1> <reg2>		:: moves val from <reg2> to <reg1>
 	SUB, // 6  -- SUB					:: subtracts top two vals on stack, (top - next), result back on stack
 	MUL, // 7  -- MUL					:: multiplies top two vals on stack
 	DIV, // 8  -- DIV					:: divides top two vals on stack
 	SLT, // 9  -- SLT <reg1> <reg2>		:: pushes (<reg1> < <reg2>) to stack
-	LOG, // 10 -- LOG <val/reg1>		:: print out <va/reg1>
+	LOG, // 10 -- LOG <reg1>			:: print out value of <reg1>
 	IF,  // 11 -- IF  <reg1> <val> <ip> :: if <reg1> == <val> branch to the pc
 	IFN, // 12 -- IFN <reg1> <val> <ip> :: if <reg1> != <val> branch to the pc
 	GLD, // 13 -- GLD <reg1>			:: loads <reg1> to stack
@@ -70,7 +70,9 @@ void eval(int instr)
 		}
 		case POP: {
 			int popVal = stack[SP--];
-			printf("Popped %d\n", popVal); // debug statement
+			registers[instructions[++PC]] = popVal; // Put top stack value in destination register
+
+			// printf("Popped %d\n", popVal); // debug statement
 			break;
 		}
 		case SET: {
@@ -102,7 +104,7 @@ void eval(int instr)
 			}
 
 			registers[registerDes] = registers[registerSrc]; // Move value from source register to destination register
-			printf("Moved value: %d\n", registers[registerDes]);
+			// printf("Moved value: %d\n", registers[registerDes]); // debug statement
 			break;
 		}
 		case SUB: {
@@ -145,6 +147,8 @@ void eval(int instr)
 			break;
 		}
 		case LOG: {
+			int val = registers[instructions[++PC]];
+			printf("%d\n", val);
 			break;
 		}
 		case  IF: {
@@ -193,7 +197,7 @@ int main(int argc, char* argv[])
 
 	if(strcmp(fileType, ".vmc") != 0)
 	{
-		printf("Error, file is of wrong type");
+		printf("Error, file is of wrong type\n");
 		return -1;
 	}
 
@@ -201,7 +205,7 @@ int main(int argc, char* argv[])
 	FILE *file = fopen(fileName, "r");
 	if(!file)
 	{
-		printf("Error, file is unreadable");
+		printf("Error, file is unreadable\n");
 		return -1;
 	}
 
