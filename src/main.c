@@ -135,7 +135,8 @@ void eval(int instr)
 			break;
 		}
 		case SLT: {
-			stack[--SP] = stack[SP+1] < stack[SP];
+			SP--;
+			stack[SP] = stack[SP+1] < stack[SP];
 			break;
 		}
 		case LOG: {
