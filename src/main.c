@@ -34,6 +34,8 @@ typedef enum InstructionSet
 	IF,  // 11 -- IF  <reg1> <val> <ip> :: if <reg1> == <val> branch to the pc
 	IFN, // 12 -- IFN <reg1> <val> <ip> :: if <reg1> != <val> branch to the pc
 	GLD, // 13 -- GLD <reg1>			:: loads <reg1> to stack
+	NOP, // 14 -- NOP					:: No operation
+	XXX, // 15 -- XXX					:: Placeholder operation
 } InstructionSet;
 
 int *instructions; // array to hold instructions read in from file
@@ -153,6 +155,9 @@ void eval(int instr)
 		case GLD: {
 			int val = registers[instructions[++PC]]; // store val in <reg1>
 			stack[++SP] = val; // put val on top of stack
+			break;
+		}
+		case NOP: {
 			break;
 		}
 	}
